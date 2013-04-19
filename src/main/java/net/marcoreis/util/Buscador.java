@@ -31,8 +31,8 @@ public class Buscador {
       QueryParser parser = new QueryParser(Version.LUCENE_36, "Texto",
           analisador);
       Query consulta = parser.parse(parametro);
-      //{4}
       long inicio = System.currentTimeMillis();
+      //{4}
       TopDocs resultado = buscador.search(consulta, 100);
       long fim = System.currentTimeMillis();
       int totalDeOcorrencias = resultado.totalHits;
