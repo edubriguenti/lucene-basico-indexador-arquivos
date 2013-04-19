@@ -12,16 +12,17 @@ import org.apache.lucene.store.*;
 import org.apache.lucene.util.*;
 import org.apache.tika.*;
 
-/**
-* Classe que indexa os arquivos de um diretório
-*/
 public class Indexador {
   private static Logger logger = Logger.getLogger(Indexador.class);
+  //{1}
   private String diretorioDosIndices = System.getProperty("user.home")
       + "/indice-lucene";
+  //{2}
   private String diretorioParaIndexar = System.getProperty("user.home")
       + "/Dropbox/MaterialDeEstudo/big-data";
+  //{3}
   private IndexWriter writer;
+  //{4}
   private Tika tika;
 
   public static void main(String[] args) {
@@ -29,9 +30,6 @@ public class Indexador {
     indexador.indexaArquivosDoDiretorio();
   }
 
-  /**
-  * Percorre o diretório raíz a procura de arquivos
-  */
   public void indexaArquivosDoDiretorio() {
     try {
       File diretorio = new File(diretorioDosIndices);
@@ -48,7 +46,7 @@ public class Indexador {
       writer = new IndexWriter(d, config);
       long inicio = System.currentTimeMillis();
       indexaArquivosDoDiretorio(new File(diretorioParaIndexar));
-      //{9}
+      //{12}
       writer.commit();
       writer.close();
       long fim = System.currentTimeMillis();
@@ -58,9 +56,6 @@ public class Indexador {
     }
   }
 
-  /**
-  * Apaga os índices existentes em um diretório
-  */
   private void apagaIndices(File diretorio) {
     if (diretorio.exists()) {
       File arquivos[] = diretorio.listFiles();
@@ -70,10 +65,6 @@ public class Indexador {
     }
   }
 
-  /**
-  * Nesta versão indexa arquivos .pdf e .txt
-  * Há bibliotecas para extrair texto de documentos do MS Office e OpenOffice
-  */
   public void indexaArquivosDoDiretorio(File raiz) {
     FilenameFilter filtro = new FilenameFilter() {
       public boolean accept(File arquivo, String nome) {
@@ -101,7 +92,7 @@ public class Indexador {
         msg.append("kb");
         logger.info(msg);
         try {
-          //{10}
+          //{9}
           String textoExtraido = getTika().parseToString(arquivo);
           indexaArquivo(arquivo, textoExtraido);
         } catch (Exception e) {
@@ -113,13 +104,10 @@ public class Indexador {
     }
   }
 
-  /**
-  * Preenche os atributos do documento que será indexado
-  */
   private void indexaArquivo(File arquivo, String textoExtraido) {
     SimpleDateFormat formatador = new SimpleDateFormat("yyyyMMdd");
     String ultimaModificacao = formatador.format(arquivo.lastModified());
-    //{11}
+    //{10}
     Document documento = new Document();
     documento.add(new Field("UltimaModificacao", ultimaModificacao,
         Field.Store.YES, Field.Index.NOT_ANALYZED));
@@ -128,7 +116,7 @@ public class Indexador {
     documento.add(new Field("Texto", textoExtraido, Field.Store.YES,
         Field.Index.ANALYZED));
     try {
-      //{12}
+      //{11}
       getWriter().addDocument(documento);
     } catch (IOException e) {
       logger.error(e);
