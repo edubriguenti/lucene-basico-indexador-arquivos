@@ -25,7 +25,7 @@ public class Indexador {
             + "/indice-lucene";
     // {2}
     private String diretorioParaIndexar = System.getProperty("user.home")
-            + "/Dropbox/entrada";
+            + "/Dropbox/material-de-estudo/big-data";
     // {3}
     private IndexWriter writer;
     // {4}
